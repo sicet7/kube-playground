@@ -1,0 +1,51 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+    name: test-app-deployment-name
+    labels:
+        test-app-label-key: test-app-label-value
+spec:
+    replicas: 3
+    selector:
+        matchLabels:
+            test-app-label-key: test-app-label-value
+    template:
+        metadata:
+            labels:
+                test-app-label-key: test-app-label-value
+        spec:
+            containers:
+                -   name: test-app
+                    image: localhost:5001/test-app:latest
+                    ports:
+                        -   containerPort: 8080
+---
+apiVersion: v1
+kind: Service
+metadata:
+    name: test-app-service-name
+spec:
+    selector:
+        test-app-label-key: test-app-label-value
+    ports:
+        -   protocol: TCP
+            port: 80
+            targetPort: 8080
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+    name: test-app-ingress-name
+spec:
+    ingressClassName: nginx
+    rules:
+        -   host: localhost
+            http:
+                paths:
+                    -   path: /
+                        pathType: Prefix
+                        backend:
+                            service:
+                                name: test-app-service-name
+                                port:
+                                    number: 80

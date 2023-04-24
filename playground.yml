@@ -1,0 +1,38 @@
+kind: Cluster
+apiVersion: kind.x-k8s.io/v1alpha4
+name: playground
+containerdConfigPatches:
+    - |-
+        [plugins."io.containerd.grpc.v1.cri".registry.mirrors."localhost:5001"]
+          endpoint = ["http://kind-registry:5000"]
+nodes:
+    -   role: control-plane
+        image: kindest/node:v1.25.8@sha256:00d3f5314cc35327706776e95b2f8e504198ce59ac545d0200a89e69fce10b7f
+        extraMounts:
+            -   hostPath: ./data/node-1
+                containerPath: /var/local-path-provisioner
+    -   role: control-plane
+        image: kindest/node:v1.25.8@sha256:00d3f5314cc35327706776e95b2f8e504198ce59ac545d0200a89e69fce10b7f
+        extraMounts:
+            -   hostPath: ./data/node-2
+                containerPath: /var/local-path-provisioner
+    -   role: control-plane
+        image: kindest/node:v1.25.8@sha256:00d3f5314cc35327706776e95b2f8e504198ce59ac545d0200a89e69fce10b7f
+        extraMounts:
+            -   hostPath: ./data/node-3
+                containerPath: /var/local-path-provisioner
+    -   role: worker
+        image: kindest/node:v1.25.8@sha256:00d3f5314cc35327706776e95b2f8e504198ce59ac545d0200a89e69fce10b7f
+        extraMounts:
+            -   hostPath: ./data/node-4
+                containerPath: /var/local-path-provisioner
+    -   role: worker
+        image: kindest/node:v1.25.8@sha256:00d3f5314cc35327706776e95b2f8e504198ce59ac545d0200a89e69fce10b7f
+        extraMounts:
+            -   hostPath: ./data/node-5
+                containerPath: /var/local-path-provisioner
+    -   role: worker
+        image: kindest/node:v1.25.8@sha256:00d3f5314cc35327706776e95b2f8e504198ce59ac545d0200a89e69fce10b7f
+        extraMounts:
+            -   hostPath: ./data/node-6
+                containerPath: /var/local-path-provisioner
